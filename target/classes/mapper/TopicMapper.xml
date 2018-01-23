@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="GBK" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.TopicMapper">
+
+    <insert id="insertTopic" parameterType="po.Topic">
+        INSERT INTO TOPIC ()
+            VALUES(#{tid},#{uid},#{title},#{context},#{block},#{time},#{clicknum},#{tstatus})
+    </insert>
+
+    <select id="selectAllTopic" resultType="po.Topic">
+        SELECT * FROM TOPIC WHERE tstatus=1 ORDER BY time DESC
+    </select>
+
+    <select id="findOneTopic" parameterType="String" resultType="po.Topic">
+        SELECT * FROM TOPIC WHERE tid=#{tid}
+    </select>
+
+    <update id="updateTopic" parameterType="Topic" >
+        UPDATE TOPIC SET context=#{context} WHERE tid=#{tid}
+    </update>
+
+    <select id="findIdByTitle" parameterType="String" resultType="String">
+        SELECT tid FROM topic where title=#{title}
+    </select>
+
+    <select id="findBlockById" parameterType="String" resultType="String">
+        SELECT block FROM topic where tid = #{tid}
+    </select>
+
+</mapper>

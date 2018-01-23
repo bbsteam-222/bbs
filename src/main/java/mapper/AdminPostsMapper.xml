@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="GBK" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.AdminPostsMapper">
+    <!--新添加的-->
+    <select id="findPosts"  resultType="po.Topic">
+        SELECT * FROM topic where tstatus != 1 and block = #{block} ORDER BY TIME DESC
+    </select>
+    <!--新添加的-->
+    <update id="updateTstatusToSuccess" parameterType="String">
+        update topic SET tstatus = 1 where tid=#{tid}
+    </update>
+    <!--新添加的-->
+    <update id="updateTstatusToFail" parameterType="String">
+        update topic SET tstatus = -1 where tid=#{tid}
+    </update>
+    <!--新添加的-->
+    <update id="updatePosts" parameterType="java.util.Map">
+        update topic SET title = #{title},context = #{context} WHERE tid= #{tid}
+    </update>
+
+    <!--这个不太记得是不是新添加的，你看下你的有没有-->
+    <select id="findPostById" parameterType="String" resultType="po.Topic">
+        SELECT * from topic where tid = #{tid}
+    </select>
+    <!--新添加的-->
+    <delete id="deletePostById" parameterType="String">
+        DELETE  FROM topic WHERE tid = #{tid}
+    </delete>
+</mapper>

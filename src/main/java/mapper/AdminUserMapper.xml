@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="GBK" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--新加的xml-->
+<mapper namespace="mapper.AdminUserMapper">
+
+    <select id="findAllUser" parameterType="String" resultType="po.User">
+       SELECT DISTINCT user.*
+        FROM USER,TOPIC
+        WHERE user.uid = topic.uid and topic.block=#{tblock}
+    </select>
+
+    <select id="selectModeCount" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM user,topic
+         WHERE user.uid = topic.uid and user.moderator = 1 and topic.block = #{block}
+    </select>
+
+    <update id="updateUserToMode" parameterType="String">
+        update user set user.moderator = 1 where user.uid = #{uid} and user.moderator = 0
+    </update>
+
+    <update id="updateModeToUser" parameterType="String">
+        update user set user.moderator = 0 where user.uid = #{uid} and user.moderator = 1
+    </update>
+
+    <delete id="deleteUserById" parameterType="String">
+        DELETE FROM USER WHERE uid=#{uid}
+    </delete>
+
+</mapper>
