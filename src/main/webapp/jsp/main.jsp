@@ -51,7 +51,7 @@
         <td style="border-top-width: 0px;">
             <% if((String)request.getAttribute("s") == "true") {%>
             <script type="text/javascript">
-                alert('发表成功，请等待管理员审核');
+                alert('发表成功，请等待管理员审核……');
             </script>
             <%}%>
             <iframe frameborder="0" src="<c:url value='/jsp/blank.jsp'/>" name="body"></iframe>
