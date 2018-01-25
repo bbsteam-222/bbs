@@ -13,7 +13,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <title>按帖子名查询</title>
+    <title>模糊查询</title>
 
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="cache-control" content="no-cache">
@@ -37,7 +37,8 @@
         input {
             width: 300px;
             height: 30px;
-            border-style:overflow-x: hidden;overflow-y: auto;
+
+            border-style:overflow-x:hidden;overflow-y: auto;
             margin:0px;
             border-color: #404040;
         }
@@ -57,9 +58,9 @@
 </head>
 
 <body>
-<form action="<c:url value='/search/showByTitle.action'/>" method="post" accept-charset="UTF-8" target="body" id="form1">
+<form action="<c:url value='/search/showByVague.action'/>" method="post" accept-charset="UTF-8" target="body" id="form1">
     <%--<input type="hidden" name="method" value="showByTitle"/>--%>
-    <input type="text" name="title"/>
+    <input type="text" name="context"/>
         <span>
     		<a href="javascript:document.getElementById('form1').submit();">
                 <img align="top" border="0" src="<c:url value='/images/btn.jpg'/> "></a>

@@ -61,6 +61,9 @@
                 会员：${sessionScope.sessionUser.username}&nbsp;&nbsp;|&nbsp;&nbsp;
                 <a href="<c:url value='/search/myTopic.action'/>" target="body">我的帖子</a>&nbsp;&nbsp;|&nbsp;&nbsp;
                 <a href="<c:url value='/showAllTopic.action'/>" target="body">全部帖子</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                <c:if test="${sessionScope.sessionUser.moderator==2}">
+                    <a href="<c:url value='/jsp/admin.jsp'/>" target="_blank">后台管理</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                </c:if>
                 <a href="<c:url value='/jsp/topic.jsp'/>" target="body">发帖</a>&nbsp;&nbsp;|&nbsp;&nbsp;
                 <%--<a href="<c:url value=''/>" target="body">修改密码</a>&nbsp;&nbsp;|&nbsp;&nbsp;--%>
                 <a href="<c:url value='/quick.action'/>" target="_parent">退出</a>&nbsp;&nbsp;|&nbsp;&nbsp;

@@ -20,6 +20,6 @@
     <bean id="searchService" class="serviceimpl.SearchServiceImpl"/>
     <bean id="adminUserService" class="serviceimpl.AdminUserServiceImpl"/>
     <bean id="adminPostsService" class="serviceimpl.AdminPostsServiceImpl"/>
-
+    <bean id="modePostsService" class="serviceimpl.ModePostsServiceImpl"/>
 
 </beans>

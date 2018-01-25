@@ -10,7 +10,9 @@ import java.util.Map;
  */
 public interface AdminPostsMapper {
     // 新添加的
-    public List<Topic> findPosts(String block) throws Exception;
+    public List<Topic> findPosts() throws Exception;
+    public List<Topic> findUncheckedPosts() throws Exception;
+    public List<Topic> findCheckedPosts() throws Exception;
     // 新添加的
     public void updateTstatusToSuccess(String tid) throws Exception;
     // 新添加的

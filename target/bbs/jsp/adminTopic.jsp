@@ -154,7 +154,7 @@
     <div class="nav2">
         <div class="mainnav">
             <ul>
-                <li><a href="">首页</a></li>
+                <li><a href="./jsp/main.jsp">首页</a></li>
                 <li class="a"><a href="">管理员界面</a></li>
 
             </ul>
@@ -168,21 +168,21 @@
         </dl>
         <dl class="person_info">
             <dt class="username">
-                <span>management</span>
+                <span>management:${sessionScope.sessionUser.username}</span>
             </dt>
             <dd class="person_Email">
-                <span>邮箱地址：</span>123456789@qq.com
+                <span>邮箱地址：</span>${sessionScope.sessionUser.email}&nbsp;&nbsp;&nbsp;&nbsp;
                 <img src="<c:url value='/images/edit.png'/>">
             </dd>
-            <dd class="mod_password">
+            <%--<dd class="mod_password">
                 <img src="<c:url value='/images/mod_password.png'/>">
                 <a href="file:///G:/project/2202/2202/csdn/csdn/mod.html" target="_blank">修改密码</a>
 
-            </dd>
+            </dd>--%>
             <dd>
-                <form name="fm" id="fm" action="${pageContext.request.contextPath}/showAllPosts.action" method="post">
+                <%--<form name="fm" id="fm" action="${pageContext.request.contextPath}/showAllPosts.action" method="post">
                     <a href=""><b>板块选择</b></a>
-                    <select  onChange = "select()" id = "block1" name="block">  <%----%>
+                    <select  onChange = "select()" id = "block1" name="block">  &lt;%&ndash;&ndash;%&gt;
                         <option value="0"></option>
                         <option value="体育">体育</option>
                         <option value="新闻">新闻</option>
@@ -191,7 +191,7 @@
                         <option value="健身">健身</option>
                         <option value="旅行">旅行</option>
                     </select>
-                    <%-- <script>
+                    &lt;%&ndash; <script>
                          window.onload = function(){
                              var param = document.getElementById("block1");
                              param.onChange = getParam(){
@@ -199,12 +199,12 @@
                                  var block = param.options[index].value;
                              }
                          }
-                     </script>--%>
-                    <%--<span><a href="<c:url value='/showBlockAllUser.action?block='/>" style="width:449px;margin-right:30px ">
-                        确定</a><br/></span>--%>
-                    <input type="submit" name="btn3" value="确定"/>
+                     </script>&ndash;%&gt;
+                    &lt;%&ndash;<span><a href="<c:url value='/showBlockAllUser.action?block='/>" style="width:449px;margin-right:30px ">
+                        确定</a><br/></span>&ndash;%&gt;
+                    <input type="submit" name="btn3" value="确定"/>--%>
                     <span>(您是管理员，有以下权限）</span>
-                </form>
+                <%--</form>--%>
             </dd>
         </dl>
     </div>
@@ -212,7 +212,7 @@
         <div id="warp" class="person_detail_tab">
             <ul id="tag">
 
-                <li data-modal="tab">用户管理</li>
+                <li data-modal="tab"><a href="./jsp/admin.jsp">用户管理</a></li>
                 <li data-modal="tab">帖子管理</li>
 
             </ul>
@@ -236,22 +236,87 @@
                         </c:forEach>
                     </div>
                 </div>
+                <div class="J_tabClass"> <!--用户发出的对某个帖子的评论，某某某应该是帖子的名字-->
+                    <%--<div class="B">--%>
+                    <div class="A">
+                        <form name="fm" id="fm" action="${pageContext.request.contextPath}/showAllPosts.action" method="post">
+                            <tr>
+                                <%--<a href="<c:url value='/showAllPosts.action?button=allPosts'/>" >--%>
+                                <input type="radio" name = "button" id ="radio1" value="所有帖子" style="margin-left: 200px">所有帖子
+                                <%--</a>--%>
+                                <input type="radio" name = "button" id ="radio2" value="待审核的帖子" style="margin-left: 200px">待审核的帖子
+                                <input type="radio" name = "button" id ="radio3" value="已审核的帖子" style="margin-left: 200px">已审核的帖子
+                                <input type="submit" name="btn3" value="确定"/>
+                            </tr>
+                        </form>
+                        <%--</div>--%>
 
-
-
+                        <tr>
+                            <h2>帖子</h2>
+                            <h2>版块</h2>
+                            <c:if test="${button.equals('所有帖子')}"><h2>状态</h2></c:if>
+                            <h2>操作</h2>
+                        </tr>
                     </div>
                     <div class="A">
 
                         <c:forEach items="${allPosts}" var="item">
                             <tr>
-                                <td><a href="<c:url value='/showDetails.action?title=${item.title}&&context=${item.context}'/>" ><input type="text" name="title" id="title" value="${item.title}" style="margin-right:240px "></a></td>
+                                <td><a href="<c:url value='/showDetails.action?title=${item.title}&&context=${item.context}'/>" >
+                                    <input type="text" name="title" id="title" value="${item.title}" style="margin-right:240px ">
+                                </a></td>
+                                <td>
+                                    <input type="text" name="block" id="block" value="${item.block}" style="margin-right:240px ">
+                                </td>
+                                <c:if test="${button.equals('所有帖子')}">
+                                    <td>
+                                        <input type="text" name="tstatus" id="tstatus"
+                                               <c:if test="${item.tstatus==0}">value="未审核"</c:if>
+                                               <c:if test="${item.tstatus==1}">value="已通过"</c:if>
+                                               <c:if test="${item.tstatus==-1}">value="未通过"</c:if>
+                                               style="margin-right:240px ">
+                                    </td>
+                                </c:if>
+
                                 <td><input type="hidden" name="context" id="context" value="${item.context }"/></td>
                                 <span class="pipe">|</span>
-                                <td><a href="<c:url value='/showDetails.action?title=${item.title}'/>" style="margin-left: 50px" >审核</a></td>
+                                <td>
+                                    <a href="<c:url value='/showDetails.action?title=${item.title}'/>"
+                                       style="margin-left: 50px" >
+                                        <input type="button" name="check" id="check"
+                                        <c:if test="${item.tstatus!=0}">
+                                               disabled="true" style="background: #5e5e5e"
+                                        </c:if>
+                                               value="审核">
+                                    </a>
+                                </td>
+
                                 <span class="pipe">|</span>
-                                <td><a href="<c:url value='/showNeedToModify.action?title=${item.title}'/>" style="margin-left: 50px">更改</a></td>
-                                <span class="pipe">|</span>
-                                <td><a href="<c:url value='/deletePostById.action?tid=${item.tid}'/>" style="margin-left: 50px">删除</a><br/></td>
+                                    <%--<td><a href="<c:url value='/showNeedToModify.action?title=${item.title}'/>" style="margin-left: 50px">更改</a></td>--%>
+                                <script type="text/javascript" language="JavaScript">
+                                    function confirmAct() {
+                                        if(confirm('确定要执行删除操作？')){
+                                            var pass = prompt("请输入登录密码：");
+                                            var tid = "${item.tid}";
+                                            if(pass == null){
+                                                alert('你取消了输入密码');
+                                            }else if(pass == ''){
+                                                alert('密码输入为空！');
+                                            }else{
+                                                alert('确认！');
+                                                window.location.href="http://localhost:8080/bbs/deletePostById.action?pass="+pass+"&&tid="+tid;
+                                                alert('${passError}');
+                                            }
+                                            return true;
+                                        }
+                                        alert("您已取消删除！");
+                                        return false;
+
+                                    }
+                                </script>
+                                <td>
+                                    <input name ="delete" type="button" onclick="return confirmAct()" value="删除" />
+                                </td>
                             </tr>
                         </c:forEach>
                     </div>

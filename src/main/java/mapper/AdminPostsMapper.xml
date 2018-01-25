@@ -4,7 +4,15 @@
 <mapper namespace="mapper.AdminPostsMapper">
     <!--新添加的-->
     <select id="findPosts"  resultType="po.Topic">
-        SELECT * FROM topic where tstatus != 1 and block = #{block} ORDER BY TIME DESC
+        SELECT * FROM topic ORDER BY TIME DESC
+    </select>
+
+    <select id="findUncheckedPosts"  resultType="po.Topic">
+        SELECT * from topic where tstatus=0 ORDER BY time DESC
+    </select>
+
+    <select id="findCheckedPosts"  resultType="po.Topic">
+        SELECT * from topic where tstatus!=0 ORDER BY time DESC
     </select>
     <!--新添加的-->
     <update id="updateTstatusToSuccess" parameterType="String">

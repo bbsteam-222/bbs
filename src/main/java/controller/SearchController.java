@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import po.Topic;
+import po.TopicCustom;
 import po.UserLogin;
 import service.SearchService;
 
@@ -26,7 +27,7 @@ public class SearchController {
     @RequestMapping("/showAllTopic")
     public String showAllTopic(HttpServletResponse response, HttpServletRequest request, Model model)throws Exception{
 
-        List<Topic> allTopic = searchService.showAllTopic();
+        List<TopicCustom> allTopic = searchService.showAllTopic();
         request.setAttribute("allTopic",allTopic);
         return "/jsp/search.jsp";
 
@@ -35,15 +36,15 @@ public class SearchController {
     @RequestMapping("/showDetial")
     public String showDetial(HttpServletResponse response,HttpServletRequest request,Model model)throws Exception{
         String titleId=request.getParameter("tid");
-        Topic topic = searchService.showDetial(titleId);
-        request.setAttribute("topic",topic);
+        TopicCustom topicCustom = searchService.showDetial(titleId);
+        request.setAttribute("topic",topicCustom);
         return "/jsp/oneTopic.jsp";
     }
 
-    @RequestMapping("/showByTitle")
-    public String showByTitle( String title,HttpServletResponse response,HttpServletRequest request,Model model)throws Exception{
+    @RequestMapping("/showByVague")
+    public String showByVague( String context,HttpServletResponse response,HttpServletRequest request,Model model)throws Exception{
 
-        List<Topic> allTopic=searchService.showTopicByTitle(title);
+        List<TopicCustom> allTopic=searchService.showTopicByVague(context);
         request.setAttribute("allTopic",allTopic);
         return "forward:/jsp/topic/list.jsp";
     }
@@ -59,7 +60,7 @@ public class SearchController {
         if (block.equals("lvyou")){block = "旅游";}
         //block=new String(block.trim().getBytes("ISO-8859-1"), "UTF-8");
         //block=block.substring(0,block.length());
-        List<Topic> allTopic=searchService.showTopicByBlock(block);
+        List<TopicCustom> allTopic=searchService.showTopicByBlock(block);
         request.setAttribute("allTopic",allTopic);
         return "forward:/jsp/topic/list.jsp";
     }
@@ -75,9 +76,9 @@ public class SearchController {
     public String findTopicByMulity(HttpServletRequest request, HttpServletResponse response, Model model, Topic topic)
             throws Exception {
         String title = request.getParameter("title");
-        String uid = request.getParameter("uid");
+        String username = request.getParameter("username");
         String block = request.getParameter("block");
-        List<Topic> allTopic = searchService.findTopicByMulity(title,uid,block);
+        List<TopicCustom> allTopic = searchService.findTopicByMulity(title,username,block);
         request.setAttribute("allTopic", allTopic);
         return "forward:/jsp/topic/list.jsp";
     }
@@ -87,7 +88,7 @@ public class SearchController {
                           Model model)throws Exception{
         UserLogin userlogin = (UserLogin) request.getSession().getAttribute("sessionUser");
         String uid = userlogin.getUid();
-        List<Topic> allTopic = searchService.showTopicByUid(uid);
+        List<TopicCustom> allTopic = searchService.showTopicByUid(uid);
         request.setAttribute("allTopic", allTopic);
         return "forward:/jsp/topic/list.jsp";
 

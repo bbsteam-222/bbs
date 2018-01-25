@@ -52,7 +52,7 @@
 							<dl class="clearfix">
 								<dd class="info" style="border:none;">
 									<span class="dec">
-										<a href="./jsp/main.jsp" class="fill-dec" target="_blank">退出</a>
+										<a href="../main.jsp" class="fill-dec" target="_blank">退出</a>
 										<span class="write-icon"></span>
 									</span>
 								</dd>
@@ -154,7 +154,7 @@
 		<div class="nav2">
 			<div class="mainnav">
 				<ul>
-					<li><a href="">首页</a></li>
+					<li><a href="../jsp/main.jsp">首页</a></li>
 					<li class="a"><a href="">管理员界面</a></li>
 
 				</ul>
@@ -168,17 +168,17 @@
 			</dl>
 			<dl class="person_info">
 				<dt class="username">
-					<span>management</span>
+					<span>management:${sessionScope.sessionUser.username}</span>
 				</dt>
 				<dd class="person_Email">
-					<span>邮箱地址：</span>123456789@qq.com
+					<span>邮箱地址：</span>${sessionScope.sessionUser.email}&nbsp;&nbsp;&nbsp;&nbsp;
 					<img src="<c:url value='/images/edit.png'/>">
 				</dd>
-				<dd class="mod_password"> 
+				<%--<dd class="mod_password">
 					<img src="<c:url value='/images/mod_password.png'/>">
 					<a href="file:///G:/project/2202/2202/csdn/csdn/mod.html" target="_blank">修改密码</a>
 
-				</dd>
+				</dd>--%>
 
 				<dd>
 					<form name="fm" id="fm" action="${pageContext.request.contextPath}/showBlockAllUser.action" method="post">
@@ -278,10 +278,29 @@
 
 										<td><label id="isCommon">${errors.isCommon}</label></td>
 									</c:if>
-									<td><a href="<c:url value='/deleteUser.action?block=${blocks.block}&&
-									username=${item.username}'/>" >
-										<input type="button" name="setToMode" id="deleteUser" value="删除" style="margin-right:240px "/>
-									</a></td>
+									<script type="text/javascript" language="JavaScript">
+                                        function confirmAct() {
+                                            if(confirm('确定要执行删除操作？')){
+                                                var pass = prompt("请输入登录密码：");
+                                                var uid = "${item.uid}";
+                                                if(pass == null){
+                                                    alert('你取消了输入密码');
+                                                }else if(pass == ''){
+                                                    alert('密码输入为空！');
+                                                }else{
+                                                    alert('确认！');
+                                                    window.location.href="http://localhost:8080/bbs/deleteUser.action?pass="+pass+"&&uid="+uid;
+                                                }
+                                                return true;
+                                            }
+                                            alert("您已取消删除！");
+                                            return false;
+
+                                        }
+									</script>
+									<td>
+										<input type="button" name="delete" id="deleteUser"  onclick="return confirmAct()" value="删除" style="margin-right:240px "/>
+									</td>
 
 								</tr>
 							</c:forEach>

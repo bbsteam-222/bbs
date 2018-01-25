@@ -59,13 +59,15 @@ public class TopicController {
             //System.out.println(errors.size());
             modelAndView.addObject("topic",topic);
             modelAndView.addObject("errors",errors);
+            modelAndView.addObject("s","false");
             modelAndView.setViewName("jsp/topic.jsp");
             return modelAndView;
         }
 
         topicService.insertTopic(topic,username);
+        modelAndView.addObject("s","true");
 
-        modelAndView.setViewName("jsp/blank.jsp");
+        modelAndView.setViewName("jsp/topic.jsp");
         return modelAndView;
 
     }
@@ -87,7 +89,7 @@ public class TopicController {
     public ModelAndView showAllTopic()throws Exception {
         List<TopicCustom> TopicCustoms = topicService.showAllTopic();
         modelAndView.addObject("allTopic",TopicCustoms);
-        modelAndView.setViewName("jsp/main.jsp");
+        modelAndView.setViewName("jsp/all.jsp");
         return modelAndView;
     }
     //用来显示点击审核后每个帖子的信息（带同意和不同意按钮）

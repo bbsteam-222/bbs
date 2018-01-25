@@ -15,8 +15,18 @@ public class AdminPostsServiceImpl implements AdminPostsService {
     @Autowired
     private AdminPostsMapper adminPostsMapper;
     @Override
-    public List<Topic> showAllPosts(String block) throws Exception {
-        return adminPostsMapper.findPosts(block);
+    public List<Topic> showAllPosts() throws Exception {
+        return adminPostsMapper.findPosts();
+    }
+
+    @Override
+    public List<Topic> showUncheckedPosts() throws Exception {
+        return adminPostsMapper.findUncheckedPosts();
+    }
+
+    @Override
+    public List<Topic> showCheckedPosts() throws Exception {
+        return adminPostsMapper.findCheckedPosts();
     }
 
     @Override

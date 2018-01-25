@@ -39,7 +39,7 @@
         </tr>
         <tr>
             <td>作者：</td>
-            <td><input type="text" name="uid"/></td>
+            <td><input type="text" name="username"/></td>
         </tr>
         <tr>
             <td>版块：</td>

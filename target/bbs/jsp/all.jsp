@@ -15,11 +15,12 @@
     <!--
     <link rel="stylesheet" type="text/css" href="styles.css">
     -->
-    <link rel="stylesheet" type="text/css" href="<c:url value='/jsp/css/topic/list.css'/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value='/jsp/css/list.css'/>">
     <link rel="stylesheet" type="text/css" href="<c:url value='/jsp/pager/pager.css'/>" />
     <script type="text/javascript" src="<c:url value='/jsp/pager/pager.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/jquery/jquery-1.5.1.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/jsp/js/topic/list.js'/>"></script>
+
 </head>
 
 <body>
@@ -32,7 +33,8 @@
 
             <a class="pic" href="<c:url value='/search/showAllTopic.action'/>"></a>
             <tr>
-                <td width="200px">标题：<a href="<c:url value='/showDetial.action?tid=${topic.tid}'/>">${topic.title}</a></td>
+                <table width="300"height="20"border="10">
+                <td width="200px">标题：<a href="<c:url value='/showDetial.action?tid=${topic.tid}'/>">${topic.title}</a></td></table>
                     <%--<td width="320px">标题：${topic.title}</td>--%>
                     <%--<td width="200px">内容：${topic.context}</td>--%>
                 <td width="100px">作者：${topic.user.username}</td>

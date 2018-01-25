@@ -41,13 +41,13 @@ public class ReplyController {
         System.out.println(reply.getContext());
         if (errors.size() > 0){
             modelAndView.addObject("errors",errors);
-            modelAndView.setViewName("jsp/oneTopic.jsp");
+            modelAndView.setViewName("jsp/blank_reply.jsp");
             return modelAndView;
         }
 
         replyService.insertReply(username,superid,reply);
 
-        modelAndView.setViewName("jsp/oneTopic.jsp");
+        modelAndView.setViewName("jsp/blank_reply.jsp");
         return modelAndView;
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import po.User;
+import po.UserLogin;
 import service.AdminUserService;
 import service.UserService;
 
@@ -91,12 +92,22 @@ public class AdminUserController{
     @RequestMapping("/deleteUser")
     public ModelAndView deleteUser(String block,String username,HttpServletRequest request,
                                    HttpServletResponse response)throws Exception{
-//        String username = request.getParameter("username");
-//        String block = request.getParameter("block");
-        String userId = userService.findIdByUsername(username);
-        adminUserService.deleteUserById(userId);
-        List<User> blockAllUser = adminUserService.showAllUser(block);
-        modelAndView.addObject("blockAllUser",blockAllUser);
+        //先验证输入的登录密码是否正确，若正确，进行接下来的操作
+        String loginname = "admin";
+        String loginpass = request.getParameter("pass");
+        UserLogin userLogin = new UserLogin();
+        userLogin.setUsername(loginname);
+        userLogin.setPassword(loginpass);
+        UserLogin userFromDb = userService.login(userLogin);
+        if (userFromDb==null){
+            //s代表string o代表对象object，为最大父类
+            modelAndView.addObject("passError","密码错误!");//保存错误信息到msg前端变量中
+        } else{
+            String userId = request.getParameter("uid");
+            adminUserService.deleteUserById(userId);
+            List<User> blockAllUser = adminUserService.showAllUser(block);
+            modelAndView.addObject("blockAllUser",blockAllUser);
+        }
         modelAndView.setViewName("/jsp/admin.jsp");
         return modelAndView;
     }

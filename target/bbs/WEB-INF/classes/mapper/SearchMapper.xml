@@ -2,32 +2,65 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.SearchMapper">
+    <resultMap id="query_by_usertopic" type="po.TopicCustom">
+        <id column="tid" property="tid"/>
+        <result column="uid" property="uid"/>
+        <result column="context" property="context"/>
+        <result column="block" property="block"/>
+        <result column="time" property="time"/>
+        <result column="clicknum" property="clicknum"/>
+        <result column="tstatus" property="tstatus"/>
+        <result column="title" property="title"/>
+        <association property="user" javaType="po.User">
+            <id column="uid" property="uid"/>
+            <result column="username" property="username"/>
+            <result column="password" property="password"/>
+            <result column="moderator" property="moderator"/>
+            <result column="email" property="email"/>
+            <result column="phone" property="phone"/>
+            <result column="birthday" property="birthday"/>
+            <result column="sex" property="sex"/>
+            <result column="status" property="status"/>
+        </association>
+    </resultMap>
 
 
-    <select id="selectTopicByBlock" parameterType="String" resultType="po.Topic">
+    <select id="selectTopicByBlock" parameterType="String" resultType="po.TopicCustom">
         SELECT * FROM TOPIC WHERE tstatus=1 AND block=#{block} ORDER BY time DESC
     </select>
 
 
-    <select id="selectTopicByUid" parameterType="String" resultType="po.Topic">
+    <select id="selectTopicByUid" parameterType="String" resultType="po.TopicCustom">
          SELECT * FROM TOPIC WHERE tstatus=1 AND uid=#{uid} ORDER BY time DESC
     </select>
 
 
-    <select id="selectTopicByTitle" parameterType="po.Topic" resultType="po.Topic">
-        SELECT * FROM TOPIC WHERE tstatus=1 AND title LIKE '%${title}%' ORDER BY time DESC
+    <select id="selectTopicByVague" parameterType="po.TopicCustom" resultMap="query_by_usertopic">
+        SELECT *
+        FROM
+        USER u,
+        TOPIC t
+        WHERE t.tstatus=1 AND u.uid = t.uid AND (t.title LIKE '%${title}%' OR u.username LIKE '%${user.username}%'
+         OR t.block LIKE '%${block}%' )
+        ORDER BY time DESC
     </select>
 
-    <select id="selectAllTopic" resultType="po.Topic">
+    <select id="selectAllTopic" resultType="po.TopicCustom">
         SELECT * FROM TOPIC WHERE tstatus=1 ORDER BY time DESC
     </select>
 
-    <select id="searchOneTopic" parameterType="String" resultType="po.Topic">
+    <select id="searchOneTopic" parameterType="String" resultType="po.TopicCustom">
         SELECT * FROM TOPIC WHERE tid=#{tid}
     </select>
 
-    <select id="findTopicByMulity" parameterType="po.Topic" resultType="po.Topic">
-        SELECT * FROM Topic WHERE tstatus=1 AND title LIKE '%${title}%' AND uid LIKE '%${uid}%' AND block LIKE '%${block}%'
+    <select id="findTopicByMulity" parameterType="po.TopicCustom" resultMap="query_by_usertopic">
+        SELECT *
+        FROM
+        USER u,
+        TOPIC t
+        WHERE u.uid = t.uid AND t.tstatus=1 AND t.title LIKE '%${title}%' AND u.username LIKE '%${user.username}%'
+         AND t.block LIKE '%${block}%'
         ORDER BY time DESC
     </select>
+
 </mapper>

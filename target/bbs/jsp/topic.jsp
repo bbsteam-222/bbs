@@ -19,7 +19,7 @@
             allowImageRemote : false,
             allowImageUpload : true,//允许上传图片
             allowFileManager:true, //允许对上传图片进行管理
-            uploadJson : "<c:url value='/kindeditor/fileUpload.action'/> ",
+            uploadJson:'../kindeditor/jsp/upload_json.jsp',
             /*fileManagerJson : 'controller/KindEditionController/fileManager',*/
             afterUpload: function(){this.sync();}, //图片上传后，将上传内容同步到textarea中
             afterBlur:  function(){this.sync();},   ////失去焦点时，将上传内容同步到textarea中
@@ -243,6 +243,14 @@
                         <td class="right">
                             <div class="pub">
                                 <input class="btn_b" id="dubmit_new_post_form" name="commit" type="submit" value="发表帖子" style="margin-top: 10px">
+
+                                <% if((String)request.getAttribute("s") == "true") {%>
+                                <script type="text/javascript">
+                                    alert('发表成功，请等待管理员审核');
+                                    window.location.href="jsp/blank.jsp";
+                                </script>
+                                <%}%>
+
                             </div>
 
                         </td>

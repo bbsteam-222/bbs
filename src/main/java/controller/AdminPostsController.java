@@ -5,8 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import po.Topic;
+import po.UserLogin;
 import service.AdminPostsService;
 import service.TopicService;
+import service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,14 +26,30 @@ public class AdminPostsController {
     private AdminPostsService adminPostsService;
     @Autowired
     private TopicService topicService;
+    @Autowired
+    private UserService userService;
     ModelAndView modelAndView = new ModelAndView();
     @RequestMapping("/showAllPosts")
     public ModelAndView showAllPosts(HttpServletRequest request,
-                                     HttpServletResponse response)throws Exception{
-        String block = request.getParameter("block");
-        List<Topic> allPosts = adminPostsService.showAllPosts(block);
-        modelAndView.addObject("allPosts",allPosts);
-        modelAndView.setViewName("/jsp/adminTopic.jsp");
+                                     HttpServletResponse response
+                                    )throws Exception{
+        String button = request.getParameter("button");
+        if(button==null){
+            modelAndView.setViewName("/jsp/adminTopic.jsp");
+        }else if(button.equals("所有帖子")){
+            List<Topic> allPosts = adminPostsService.showAllPosts();
+            modelAndView.addObject("allPosts",allPosts);
+            modelAndView.setViewName("/jsp/adminTopic.jsp");
+        }else if(button.equals("待审核的帖子")){
+            List<Topic> uncheckedPosts = adminPostsService.showUncheckedPosts();
+            modelAndView.addObject("allPosts",uncheckedPosts);
+            modelAndView.setViewName("/jsp/adminTopic.jsp");
+        }else if(button.equals("已审核的帖子")){
+            List<Topic> checkedPosts = adminPostsService.showCheckedPosts();
+            modelAndView.addObject("allPosts",checkedPosts);
+            modelAndView.setViewName("/jsp/adminTopic.jsp");
+        }
+        modelAndView.addObject("button",button);
         return modelAndView;
     }
     @RequestMapping("/examinePosts")
@@ -59,38 +77,34 @@ public class AdminPostsController {
         }else {
             status = "未通过";
         }
-        List<Topic> allPosts = adminPostsService.showAllPosts(block);
+        List<Topic> allPosts = adminPostsService.showAllPosts();
         modelAndView.addObject("allPosts",allPosts);
         request.setAttribute("status",status);
         modelAndView.setViewName("jsp/adminTopic.jsp");
         return modelAndView;
     }
-    @RequestMapping("/modifyPosts")
-    public ModelAndView modifyPosts(String tid,HttpServletRequest request,
-                                    HttpServletResponse response)throws Exception{
-        String title = request.getParameter("title");
-//        String tid = topicService.findIdByTitle(title);
-//        Topic topic1 = adminPostsService.findPostById(tid);
-        String context = request.getParameter("context");
-        String block = topicService.findBlockById(tid);
-        Map<String,String> map = new HashMap<>();
-        map.put("title",title);
-        map.put("context",context);
-        map.put("tid",tid);
-        adminPostsService.updatePosts(map);
-        Topic topic = adminPostsService.findPostById(tid);
-        List<Topic> allPosts = adminPostsService.showAllPosts(block);
-        modelAndView.addObject("allPosts",allPosts);
-        modelAndView.addObject("topic",topic);
-        modelAndView.setViewName("jsp/adminTopic.jsp");
-        return modelAndView;
-    }
+
     @RequestMapping("/deletePostById")
-    public ModelAndView deletePostById(String tid)throws Exception{
-        adminPostsService.deletePostById(tid);
-        String block = topicService.findBlockById(tid);
-        List<Topic> allPosts = adminPostsService.showAllPosts(block);
-        modelAndView.addObject("allPosts",allPosts);
+    public ModelAndView deletePostById(HttpServletRequest request,
+                                       HttpServletResponse response
+                                        )throws Exception{
+        //先验证输入的登录密码是否正确，若正确，进行接下来的操作
+        String loginname = "linp";
+        String loginpass = request.getParameter("pass");
+        UserLogin userLogin = new UserLogin();
+        userLogin.setUsername(loginname);
+        userLogin.setPassword(loginpass);
+        UserLogin userFromDb = userService.login(userLogin);
+        if (userFromDb==null){
+            //s代表string o代表对象object，为最大父类
+            modelAndView.addObject("passError","密码错误!");//保存错误信息到msg前端变量中
+        } else{
+            String tid = request.getParameter("tid");
+            adminPostsService.deletePostById(tid);
+            String block = topicService.findBlockById(tid);
+            List<Topic> allPosts = adminPostsService.showAllPosts();
+            modelAndView.addObject("allPosts",allPosts);
+        }
         modelAndView.setViewName("/jsp/adminTopic.jsp");
         return modelAndView;
     }

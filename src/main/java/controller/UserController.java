@@ -6,8 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import po.Topic;
 import po.UserLogin;
 import po.UserResiger;
+import service.ModePostsService;
 import service.UserService;
 
 import javax.servlet.http.Cookie;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -30,6 +33,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private ModePostsService modePostsService;
     ModelAndView modelAndView = new ModelAndView();
 
     @RequestMapping("/registSubmit")
@@ -179,16 +184,25 @@ public class UserController {
                 model.addAttribute("user",userLogin);
                 return "/jsp/login.jsp";
             }else {
-                if(userFromDb.getModerator()!=2){
-                    //userFromDb放在userSession里面
-                    request.getSession().setAttribute("sessionUser",userFromDb);
-                    String loginnameDb = userFromDb.getUsername();
-                    loginnameDb = URLEncoder.encode("loginnameDb","utf-8");
-                    Cookie cookie = new Cookie("loginnameDb",loginnameDb);
-                    cookie.setMaxAge(60*60*24*10);
-                    response.addCookie(cookie);
-//                request.setAttribute("msg","登录成功！");
-                    return "/jsp/blank.jsp";
+                //userFromDb放在userSession里面
+                request.getSession().setAttribute("sessionUser",userFromDb);
+                String loginnameDb = userFromDb.getUsername();
+                loginnameDb = URLEncoder.encode("loginnameDb","utf-8");
+                Cookie cookie = new Cookie("loginnameDb",loginnameDb);
+                cookie.setMaxAge(60*60*24*10);
+                response.addCookie(cookie);
+                if(userFromDb.getModerator()==0) {
+                    return "/jsp/main.jsp";
+                }
+                else if(userFromDb.getModerator()==1){
+//                //若是版主，通过用户名得到所在版块以及该板块下的所有帖子
+                    String uid = modePostsService.findIdByName(loginname);
+                    String block = modePostsService.findBlock(uid);
+                    List<Topic> posts = modePostsService.findPostsByBlock(block);
+
+                    request.getSession().setAttribute("modeBlock",block);
+                    request.getSession().setAttribute("sessionPostsByBlock",posts);
+                    return "/jsp/moderator.jsp";
                 }
                 else{
                     return "/jsp/admin.jsp";

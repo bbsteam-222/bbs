@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="GBK" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.ModePostsMapper">
+    <!--新添加的-->
+    <select id="findBlock" parameterType="String" resultType="String">
+        SELECT DISTINCT topic.block FROM user,topic where topic.uid=#{uid}
+    </select>
+    <select id="findIdByName" parameterType="String" resultType="String">
+        SELECT uid from user where username = #{username}
+    </select>
+    <select id="findPostsByBlock" parameterType="String" resultType="po.Topic">
+        SELECT * FROM topic where block = #{block}
+    </select>
+</mapper>

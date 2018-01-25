@@ -28,7 +28,9 @@
 </head>
 
 <body>
+
 <table class="table" align="center">
+
     <tr class="trTop">
         <td colspan="2" class="tdTop">
             <iframe frameborder="0" src="<c:url value='/jsp/top.jsp'/>" name="top"></iframe>
@@ -41,12 +43,22 @@
         <td class="tdSearch" style="border-bottom-width: 0px;">
             <iframe frameborder="0" src="<c:url value='/jsp/search.jsp'/>" name="search"></iframe>
         </td>
+
+
+
     </tr>
     <tr>
         <td style="border-top-width: 0px;">
-            <iframe frameborder="0" src="<c:url value='/jsp/body.jsp'/>" name="body"></iframe>
+            <% if((String)request.getAttribute("s") == "true") {%>
+            <script type="text/javascript">
+                alert('发表成功，请等待管理员审核');
+            </script>
+            <%}%>
+            <iframe frameborder="0" src="<c:url value='/jsp/blank.jsp'/>" name="body"></iframe>
         </td>
     </tr>
+
 </table>
+
 </body>
 </html>
